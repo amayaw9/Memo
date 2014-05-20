@@ -11,15 +11,18 @@ import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.content.Intent;
 import android.content.DialogInterface;
+import android.content.ContentValues;
 import android.provider.MediaStore;
 import android.graphics.Bitmap;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -28,13 +31,15 @@ import java.util.Date;
 
 public class EditorActivity extends Activity {
     private FileOutputStream fileOutputStream = null;
+    private FileInputStream fileInputStream = null;
     private TextView titleTextView = null;
     private EditText titleEditText = null;
     private ImageButton cameraButton = null;
     private TextView bodyTextView = null;
     private EditText bodyEditText = null;
     private Button saveButton = null;
-
+    private File file = null;
+    
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,34 +70,29 @@ public class EditorActivity extends Activity {
                     @Override
                     /** カメラの起動 */
                     public void onClick(View view) {
-                        
-                        Intent cameraIntent = new Intent();
-                        cameraIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                        cameraIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                              Uri.fromFile(new File(Environment.getExternalStorageDirectory(), 
-                                                                    new Date().toString())));
-                        //startActivityForResult(cameraIntent, 1);
-                        finish();
+                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        Uri uri = Uri.fromFile(new File("/data/data/com.sample.memo" + (new Date()).toString()));
+                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                        startActivityForResult(cameraIntent, 111);
                     }
                     
-                    /** startActivityForResult(カメラアプリ)から
-                        呼び出し元へ戻る前に呼ばれるメソッド */
+                    /** 呼び出し元へ戻る前に呼ばれるメソッド */
                     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-                        if (resultCode == RESULT_CANCELED && data.getData() == null) {
-                                return;
-                        }
-                        String s = (new Date()).toString();
-                        try {
-                            fileOutputStream = openFileOutput(s, MODE_PRIVATE);
-                            Bitmap bitmap = (Bitmap)data.getExtras().get("data");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }                    
+                        if (requestCode == 111 && resultCode == Activity.RESULT_OK) {
+                            try {
+                                Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+                                //bitmap.compress(Bitmap.CompressFormat.JPEG, 100, EditorActivity.this.getContentResolver().openOutputStream(uri));
+                                fileOutputStream.close();
+                                Toast.makeText(EditorActivity.this, "撮影した" + data.getData(), Toast.LENGTH_LONG).show();                                
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            finish();
+                        }                    
+                    }
                 });
         }
-
+        
         titleTextView = (TextView)findViewById(R.id.titleTextView);
         bodyTextView = (TextView)findViewById(R.id.bodyTextView);
         saveButton = (Button)findViewById(R.id.saveButton);
@@ -107,6 +107,14 @@ public class EditorActivity extends Activity {
                             builder.setCancelable(false);
                             builder.setPositiveButton("して", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
+                                        try {
+                                            fileOutputStream = openFileOutput(titleEditText.getText().toString(), MODE_PRIVATE);
+                                            fileOutputStream.write(bodyEditText.getText().toString().getBytes());
+                                            fileOutputStream.close();
+                                            Toast.makeText(EditorActivity.this, "保存した", Toast.LENGTH_LONG).show();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
                                         EditorActivity.this.finish();
                                     }
                                 });
@@ -119,6 +127,7 @@ public class EditorActivity extends Activity {
                         } else {
                             fileOutputStream = openFileOutput(s, MODE_PRIVATE);
                             fileOutputStream.write(bodyEditText.getText().toString().getBytes());
+                            fileOutputStream.close();
                             Toast.makeText(EditorActivity.this, "保存した", Toast.LENGTH_LONG).show();
                         }
                     } catch (IOException e) {

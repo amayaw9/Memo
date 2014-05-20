@@ -47,8 +47,8 @@ public class MemoActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     ////////////////////////
-                    dialog.setTitle("test");
-                    dialog.setMessage("twitter");
+                    dialog.setTitle("twitter");
+                    dialog.setMessage("OAuth認証の勉強のために実装すべし");
                     dialog.show();
                 }    
             });

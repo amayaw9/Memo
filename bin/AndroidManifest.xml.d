@@ -1,2 +1,2 @@
-/Users/kuwayama/workspace/Memo/bin/AndroidManifest.xml : \
-/Users/kuwayama/workspace/Memo/AndroidManifest.xml \
+/home/tomoya/workspace/Memo/bin/AndroidManifest.xml : \
+/home/tomoya/workspace/Memo/AndroidManifest.xml \

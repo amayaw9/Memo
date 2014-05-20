@@ -19,7 +19,7 @@ public class ListActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        //setContentView(R.layout.main);
+        setContentView(R.layout.main);
         dialog = new AlertDialog.Builder(this);
         listView = new ListView(this);
         files = fileList();        
@@ -27,7 +27,8 @@ public class ListActivity extends Activity {
                                                                 android.R.layout.simple_list_item_1,
                                                                 files);
         listView.setAdapter(adapter);
-        //listView.setSelection(1); /* 何の設定値？？？ */
+        /** 何の設定値？？？ */
+        //listView.setSelection(1); 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -39,7 +40,7 @@ public class ListActivity extends Activity {
                     startActivity(editorIntent);
                 }
             });
-        /* 長押しクリックイベントで削除 */
+        /** 長押しクリックイベントで削除 */
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {

@@ -45,7 +45,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical|center_horizontal|right"
         android:text="記録" />
-    
   </LinearLayout>
 
 </LinearLayout>
