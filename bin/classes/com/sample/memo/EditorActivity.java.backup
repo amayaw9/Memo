@@ -1,0 +1,121 @@
+package com.sample.memo;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Button;
+import android.widget.Toast;
+import android.content.Intent;
+import android.content.DialogInterface;
+import android.provider.MediaStore;
+
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.Arrays;
+import java.util.List;
+
+
+public class EditorActivity extends Activity {
+    private FileOutputStream fileOutputStream = null;
+    private OutputStreamWriter writer = null;
+    private LinearLayout linearLayout = null;
+    private TextView titleTextView = null;
+    private EditText titleEditText = null;
+    private Button cameraButton = null;
+    private TextView bodyTextView = null;
+    private EditText bodyEditText = null;
+    private Button saveButton = null;
+
+    /** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        linearLayout = new LinearLayout(this);
+        titleTextView = new TextView(this);
+        titleTextView.setText("題名");
+        titleEditText = new EditText(this);
+        cameraButton = new Button(this);
+        bodyTextView = new TextView(this);
+        bodyTextView.setText("本文");
+        bodyEditText = new EditText(this);
+        saveButton = new Button(this);
+        saveButton.setText("記録");
+        saveButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        String s = titleEditText.getText().toString();
+                        if (Arrays.asList(fileList()).contains(s)) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(EditorActivity.this);
+                            builder.setMessage("上書き保存するよ？");
+                            builder.setCancelable(false);
+                            builder.setPositiveButton("して", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        EditorActivity.this.finish();
+                                    }
+                                });
+                            builder.setNegativeButton("ダメ", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                        }
+                                });
+                            builder.show();
+                        } else {
+                            fileOutputStream = openFileOutput(s, MODE_PRIVATE);
+                            fileOutputStream.write(bodyEditText.getText().toString().getBytes());
+                            Toast.makeText(EditorActivity.this, "保存した", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //finish();
+                }
+            });
+
+        String title = getIntent().getStringExtra("TITLE");
+        if (title == null) {
+            cameraButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent cameraIntent = new Intent();
+                        cameraIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                        cameraIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                        startActivity(cameraIntent);
+                        // startActivityForResult(intent, 0); 
+                        // ここの0の番号で呼び出し元と呼び出し先で対象かどうか判断する
+                        /* カメラで取得したデータを保存する処理 */
+                        //finish();
+                    }
+                });
+            linearLayout.addView(cameraButton);
+        } else {
+            try {
+                FileInputStream fileInputStream = openFileInput(title);
+                byte[] b = new byte[fileInputStream.available()];
+                fileInputStream.read(b);
+                titleEditText.setText(title);
+                bodyEditText.setText(new String(b));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        linearLayout.addView(titleTextView);
+        linearLayout.addView(titleEditText);
+        linearLayout.addView(bodyTextView);
+        linearLayout.addView(bodyEditText);
+        linearLayout.addView(saveButton);
+        setContentView(linearLayout);
+    }
+}
+/** xml ファイルを読み込む
+    新規ではカメラボタン有り
+    編集ではカメラボタン無し
+*/

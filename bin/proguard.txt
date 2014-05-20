@@ -1,0 +1,9 @@
+# view AndroidManifest.xml #generated:14
+-keep class com.sample.memo.EditorActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:21
+-keep class com.sample.memo.ListActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:7
+-keep class com.sample.memo.MemoActivity { <init>(...); }
+

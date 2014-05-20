@@ -1,0 +1,25 @@
+/Users/kuwayama/workspace/Memo/bin/classes.dex : \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/BuildConfig.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/EditorActivity$1.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/EditorActivity$2$1.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/EditorActivity$2$2.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/EditorActivity$2.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/EditorActivity.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/EditorActivity.java.backup \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/ListActivity$1.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/ListActivity$2.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/ListActivity.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/MemoActivity$1.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/MemoActivity$2.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/MemoActivity$3.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/MemoActivity.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/R$attr.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/R$drawable.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/R$id.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/R$layout.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/R$string.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/R.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/TwitterActivity$1.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/TwitterActivity$2.class \
+/Users/kuwayama/workspace/Memo/bin/classes/com/sample/memo/TwitterActivity.class \
+/Users/kuwayama/workspace/Memo/bin/classes/R.java.d \

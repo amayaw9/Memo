@@ -77,15 +77,19 @@ public class EditorActivity extends Activity {
                     }
                     
                     /** startActivityForResult(カメラアプリ)から
-                        呼び出し元へ戻る前に呼ばれるメソッド 
+                        呼び出し元へ戻る前に呼ばれるメソッド */
                     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
                         if (resultCode == RESULT_CANCELED && data.getData() == null) {
                                 return;
                         }
-                        fileOutputStream = openFileOutput(s, MODE_PRIVATE);
-                        Bitmap bitmap = (Bitmap)data.getExtras().get("data");
-                    }
-                    */
+                        String s = (new Date()).toString();
+                        try {
+                            fileOutputStream = openFileOutput(s, MODE_PRIVATE);
+                            Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }                    
                 });
         }
 
