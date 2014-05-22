@@ -27,5 +27,9 @@
       <activity android:name=".ListDataActivity" 
                 android:label="@string/app_name">
       </activity>
+
+      <activity android:name=".TakerActivity" 
+                android:label="@string/app_name">
+      </activity>
     </application>
 </manifest>

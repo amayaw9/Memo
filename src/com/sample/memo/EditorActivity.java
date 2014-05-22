@@ -70,26 +70,10 @@ public class EditorActivity extends Activity {
                     @Override
                     /** カメラの起動 */
                     public void onClick(View view) {
-                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                        Uri uri = Uri.fromFile(new File("/data/data/com.sample.memo" + (new Date()).toString()));
-                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                        startActivityForResult(cameraIntent, 111);
-                    }
-                    
-                    /** 呼び出し元へ戻る前に呼ばれるメソッド */
-                    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-                        if (requestCode == 111 && resultCode == Activity.RESULT_OK) {
-                            try {
-                                fileOutputStream = openFileOutput((new Date()).toString() + ".jpg", MODE_PRIVATE);
-                                Bitmap bitmap = (Bitmap)data.getExtras().get("data");
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-                                fileOutputStream.close();
-                                Toast.makeText(EditorActivity.this, "撮影した" + data.getData(), Toast.LENGTH_LONG).show();                                
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            //finish();
-                        }                    
+                        Intent takerIntent = new Intent(EditorActivity.this,
+                                                        com.sample.memo.TakerActivity.class);
+                        startActivity(takerIntent);
+                        EditorActivity.this.finish();
                     }
                 });
         }
