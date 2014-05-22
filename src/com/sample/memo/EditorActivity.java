@@ -38,23 +38,23 @@ public class EditorActivity extends Activity {
     private TextView bodyTextView = null;
     private EditText bodyEditText = null;
     private Button saveButton = null;
-    private File file = null;
+    private String defaultTitle = null;
     
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
             
-        String title = getIntent().getStringExtra("TITLE");
-        if (title != null) {
+        defaultTitle = getIntent().getStringExtra("TITLE");
+        if (defaultTitle != null) {
             /** 既存ファイルの編集ならばファイルを読み込む */
             setContentView(R.layout.editor);
             try {
-                FileInputStream fileInputStream = openFileInput(title);
+                FileInputStream fileInputStream = openFileInput(defaultTitle);
                 byte[] b = new byte[fileInputStream.available()];
                 fileInputStream.read(b);
                 titleEditText = (EditText)findViewById(R.id.titleEditText);
-                titleEditText.setText(title);
+                titleEditText.setText(defaultTitle);
                 bodyEditText = (EditText)findViewById(R.id.bodyEditText);
                 bodyEditText.setText(new String(b));
             } catch (IOException e) {
@@ -88,7 +88,7 @@ public class EditorActivity extends Activity {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            finish();
+                            //finish();
                         }                    
                     }
                 });
@@ -97,12 +97,15 @@ public class EditorActivity extends Activity {
         titleTextView = (TextView)findViewById(R.id.titleTextView);
         bodyTextView = (TextView)findViewById(R.id.bodyTextView);
         saveButton = (Button)findViewById(R.id.saveButton);
+        
+        /** ファイル保存の処理 */
         saveButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {
                         String s = titleEditText.getText().toString();
                         if (Arrays.asList(fileList()).contains(s)) {
+                            /** 上書き保存 */
                             AlertDialog.Builder builder = new AlertDialog.Builder(EditorActivity.this);
                             builder.setMessage("上書き保存するよ？");
                             builder.setCancelable(false);
@@ -116,7 +119,6 @@ public class EditorActivity extends Activity {
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
-                                        EditorActivity.this.finish();
                                     }
                                 });
                             builder.setNegativeButton("ダメ", new DialogInterface.OnClickListener() {
@@ -126,6 +128,11 @@ public class EditorActivity extends Activity {
                                 });
                             builder.show();
                         } else {
+                            /** 新規保存 or タイトルを変更,元のファイルは削除 */
+                            if (defaultTitle != null) {
+                                deleteFile(defaultTitle);
+                                
+                            }                                
                             fileOutputStream = openFileOutput(s, MODE_PRIVATE);
                             fileOutputStream.write(bodyEditText.getText().toString().getBytes());
                             fileOutputStream.close();
@@ -134,8 +141,17 @@ public class EditorActivity extends Activity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    //finish();
                 }
             });
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (defaultTitle != null) {
+            Intent listDataIntent = new Intent(EditorActivity.this,
+                                               com.sample.memo.ListDataActivity.class);
+            startActivity(listDataIntent);
+            overridePendingTransition(0, 0);
+        }
     }
 }

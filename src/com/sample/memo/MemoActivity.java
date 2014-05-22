@@ -37,9 +37,9 @@ public class MemoActivity extends Activity {
         listButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent listIntent = new Intent(MemoActivity.this, 
-                                                   com.sample.memo.ListDataActivity.class);
-                    startActivity(listIntent);
+                    Intent listDataIntent = new Intent(MemoActivity.this, 
+                                                       com.sample.memo.ListDataActivity.class);
+                    startActivity(listDataIntent);
                 }
             });         
         twitterButton = (Button)findViewById(R.id.twitterButton);

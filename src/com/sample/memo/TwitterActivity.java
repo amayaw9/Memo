@@ -19,18 +19,17 @@ public class TwitterActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        //setContentView(R.layout.main);
         dialog = new AlertDialog.Builder(this);
         listView = new ListView(this);
+        setContentView(listView);
+        /* 認証画面の表示とOAuth */
 
-        /** 認証画面の表示とOAuth */
-
-        /** ツイートを取得して表示する 
-        listView.setAdapter(adapter);
+        /* ツイートを取得して表示する 
+           listView.setAdapter(adapter);
         */
 
-        //listView.setSelection(1); /* 何の設定値？？？ */
-        /** 個々のツイートを選択したら...
+        listView.setSelection(1);
+        /* 個々のツイートを選択したら...
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -39,7 +38,7 @@ public class TwitterActivity extends Activity {
             });
         */
 
-        /** フリックしたときに更新するListener登録 */
+        /* フリックしたときに更新するListener登録 */
         setContentView(listView);
     }
 }

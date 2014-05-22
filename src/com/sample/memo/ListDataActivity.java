@@ -34,6 +34,7 @@ public class ListDataActivity extends Activity {
         listView.setSelection(1);
         
         setContentView(listView);
+        /** クリックイベントで編集 */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -43,6 +44,7 @@ public class ListDataActivity extends Activity {
                                                      com.sample.memo.EditorActivity.class);
                     editorIntent.putExtra("TITLE", s);
                     startActivity(editorIntent);
+                    ListDataActivity.this.finish();
                 }
             });
 
@@ -64,9 +66,9 @@ public class ListDataActivity extends Activity {
                                     deleteFile(file.toString());
                                     aa.remove(file.toURI().toString());
                                     aa.notifyDataSetChanged();
-                                    Intent intent = new Intent(ListDataActivity.this,
-                                                               com.sample.memo.ListDataActivity.class);
-                                    startActivity(intent);
+                                    Intent listDataIntent = new Intent(ListDataActivity.this,
+                                                                       com.sample.memo.ListDataActivity.class);
+                                    startActivity(listDataIntent);
                                     overridePendingTransition(0, 0);
                                     ListDataActivity.this.finish();
                                     Toast.makeText(ListDataActivity.this, "削除した", Toast.LENGTH_LONG).show();
