@@ -18,6 +18,7 @@ import android.content.DialogInterface;
 import android.content.ContentValues;
 import android.provider.MediaStore;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,6 +39,7 @@ public class EditorActivity extends Activity {
     private TextView bodyTextView = null;
     private EditText bodyEditText = null;
     private Button saveButton = null;
+    private ImageView pictureView = null;
     private String defaultTitle = null;
     
     /** Called when the activity is first created. */
@@ -46,87 +48,101 @@ public class EditorActivity extends Activity {
         super.onCreate(savedInstanceState);
             
         defaultTitle = getIntent().getStringExtra("TITLE");
-        if (defaultTitle != null) {
-            /** 既存ファイルの編集ならばファイルを読み込む */
-            setContentView(R.layout.editor);
+        if (defaultTitle != null && (defaultTitle.length() >= 4 && defaultTitle.substring(defaultTitle.length() - 4, defaultTitle.length()).equals(".bmp"))) {
+            /** 画像ファイルならば写真を表示 */
+            setContentView(R.layout.picture);
+            pictureView = (ImageView)findViewById(R.id.pictureView);
             try {
-                FileInputStream fileInputStream = openFileInput(defaultTitle);
-                byte[] b = new byte[fileInputStream.available()];
-                fileInputStream.read(b);
-                titleEditText = (EditText)findViewById(R.id.titleEditText);
-                titleEditText.setText(defaultTitle);
-                bodyEditText = (EditText)findViewById(R.id.bodyEditText);
-                bodyEditText.setText(new String(b));
-            } catch (IOException e) {
+                fileInputStream = openFileInput(defaultTitle);
+                Bitmap pictureImage = BitmapFactory.decodeStream(fileInputStream);
+                pictureView.setImageBitmap(pictureImage);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
-            /** 新規作成ならばカメラ付きのUIを生成 */
-            setContentView(R.layout.camera);
-            titleEditText = (EditText)findViewById(R.id.titleEditText);
-            bodyEditText = (EditText)findViewById(R.id.bodyEditText);
-            cameraButton = (ImageButton)findViewById(R.id.cameraButton);
-            cameraButton.setOnClickListener(new OnClickListener() {
-                    @Override
-                    /** カメラの起動 */
-                    public void onClick(View view) {
-                        Intent takerIntent = new Intent(EditorActivity.this,
+            if (defaultTitle != null) {
+                /** 既存ファイルの編集ならばファイルを読み込む */
+                setContentView(R.layout.editor);
+                try {
+                    FileInputStream fileInputStream = openFileInput(defaultTitle);
+                    byte[] b = new byte[fileInputStream.available()];
+                    fileInputStream.read(b);
+                    titleEditText = (EditText)findViewById(R.id.titleEditText);
+                    titleEditText.setText(defaultTitle);
+                    bodyEditText = (EditText)findViewById(R.id.bodyEditText);
+                    bodyEditText.setText(new String(b));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                /** 新規作成ならばカメラ付きのUIを生成 */
+                setContentView(R.layout.camera);
+                titleEditText = (EditText)findViewById(R.id.titleEditText);
+                bodyEditText = (EditText)findViewById(R.id.bodyEditText);
+                cameraButton = (ImageButton)findViewById(R.id.cameraButton);
+                cameraButton.setOnClickListener(new OnClickListener() {
+                        @Override
+                        /** カメラの起動 */
+                        public void onClick(View view) {
+                            Intent takerIntent = new Intent(EditorActivity.this,
                                                         com.sample.memo.TakerActivity.class);
-                        startActivity(takerIntent);
-                        EditorActivity.this.finish();
+                            startActivity(takerIntent);
+                            EditorActivity.this.finish();
+                        }
+                    });
+            }
+        
+            titleTextView = (TextView)findViewById(R.id.titleTextView);
+            bodyTextView = (TextView)findViewById(R.id.bodyTextView);
+            saveButton = (Button)findViewById(R.id.saveButton);
+            
+            /** ファイル保存の処理 */
+            saveButton.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            String s = titleEditText.getText().toString();
+                            if (Arrays.asList(fileList()).contains(s)) {
+                                /** 上書き保存 */
+                                AlertDialog.Builder builder = new AlertDialog.Builder(EditorActivity.this);
+                                builder.setMessage("上書き保存するよ？");
+                                builder.setCancelable(false);
+                                builder.setPositiveButton("して", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            try {
+                                                fileOutputStream = openFileOutput(titleEditText.getText().toString(), MODE_PRIVATE);
+                                                fileOutputStream.write(bodyEditText.getText().toString().getBytes());
+                                                fileOutputStream.close();
+                                                Toast.makeText(EditorActivity.this, "保存した", Toast.LENGTH_LONG).show();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                                builder.setNegativeButton("ダメ", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+                                builder.show();
+                            } else {
+                                /** 新規保存 or タイトルを変更,元のファイルは削除 */
+                                if (defaultTitle != null) {
+                                    deleteFile(defaultTitle);
+                                }                                
+                                fileOutputStream = openFileOutput(s, MODE_PRIVATE);
+                                fileOutputStream.write(bodyEditText.getText().toString().getBytes());
+                                fileOutputStream.close();
+                                Toast.makeText(EditorActivity.this, "保存した", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
         }
-        
-        titleTextView = (TextView)findViewById(R.id.titleTextView);
-        bodyTextView = (TextView)findViewById(R.id.bodyTextView);
-        saveButton = (Button)findViewById(R.id.saveButton);
-        
-        /** ファイル保存の処理 */
-        saveButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        String s = titleEditText.getText().toString();
-                        if (Arrays.asList(fileList()).contains(s)) {
-                            /** 上書き保存 */
-                            AlertDialog.Builder builder = new AlertDialog.Builder(EditorActivity.this);
-                            builder.setMessage("上書き保存するよ？");
-                            builder.setCancelable(false);
-                            builder.setPositiveButton("して", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        try {
-                                            fileOutputStream = openFileOutput(titleEditText.getText().toString(), MODE_PRIVATE);
-                                            fileOutputStream.write(bodyEditText.getText().toString().getBytes());
-                                            fileOutputStream.close();
-                                            Toast.makeText(EditorActivity.this, "保存した", Toast.LENGTH_LONG).show();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
-                            builder.setNegativeButton("ダメ", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                        }
-                                });
-                            builder.show();
-                        } else {
-                            /** 新規保存 or タイトルを変更,元のファイルは削除 */
-                            if (defaultTitle != null) {
-                                deleteFile(defaultTitle);
-                                
-                            }                                
-                            fileOutputStream = openFileOutput(s, MODE_PRIVATE);
-                            fileOutputStream.write(bodyEditText.getText().toString().getBytes());
-                            fileOutputStream.close();
-                            Toast.makeText(EditorActivity.this, "保存した", Toast.LENGTH_LONG).show();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
     }
     @Override
     public void onBackPressed() {

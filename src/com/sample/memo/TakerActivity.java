@@ -18,14 +18,14 @@ import java.text.SimpleDateFormat;
 
 public class TakerActivity extends Activity {
     private Button takeButton = null;
-    private ImageView pictureView = null;
+    private ImageView captureView = null;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.taker);
         takeButton = (Button)findViewById(R.id.takeButton);
-        pictureView = (ImageView)findViewById(R.id.pictureView);
+        captureView = (ImageView)findViewById(R.id.captureView);
 
         takeButton.setOnClickListener(new OnClickListener(){
                 @Override
@@ -41,11 +41,11 @@ public class TakerActivity extends Activity {
         if(requestCode == 0 && resultCode == Activity.RESULT_OK ){
             try {
                 Calendar calendar = Calendar.getInstance();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日E曜日");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日(E)HH時mm分ss秒");
                 String s = simpleDateFormat.format(calendar.getTime());
                 Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
-                FileOutputStream fileOutputStream = openFileOutput(s + ".jpg", MODE_PRIVATE);
-                pictureView.setImageBitmap(capturedImage);
+                FileOutputStream fileOutputStream = openFileOutput(s + ".bmp", MODE_PRIVATE);
+                captureView.setImageBitmap(capturedImage);
                 capturedImage.compress(CompressFormat.JPEG, 100, fileOutputStream);
                 fileOutputStream.close();
             } catch (Exception e) {
