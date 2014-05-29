@@ -16,6 +16,9 @@ import android.widget.Toast;
 import android.content.Intent;
 import android.content.DialogInterface;
 import android.content.ContentValues;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -147,14 +150,24 @@ public class EditorActivity extends Activity {
                 });
         }
     }
+
+    /** 戻るボタンを押したら再描画 */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         if (defaultTitle != null) {
-            Intent listDataIntent = new Intent(EditorActivity.this,
-                                               com.sample.memo.ListDataActivity.class);
-            startActivity(listDataIntent);
-            overridePendingTransition(0, 0);
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(EditorActivity.this);
+            if (sharedPref.getInt("VIEW_OF_TABLE", 0) == getResources().getInteger(R.integer.grid)) {
+                Intent gridDataIntent = new Intent(EditorActivity.this,
+                                                   com.sample.memo.GridDataActivity.class);
+                startActivity(gridDataIntent);
+                overridePendingTransition(0, 0);
+            } else {
+                Intent listDataIntent = new Intent(EditorActivity.this,
+                                                   com.sample.memo.ListDataActivity.class);
+                startActivity(listDataIntent);
+                overridePendingTransition(0, 0);
+            }
         }
     }
 }

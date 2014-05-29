@@ -2,6 +2,11 @@ package com.sample.memo;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
@@ -12,9 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -105,7 +107,12 @@ public class GridDataActivity extends Activity {
         Intent listDataIntent = new Intent(GridDataActivity.this,
                                            com.sample.memo.ListDataActivity.class);
         startActivity(listDataIntent);
+        overridePendingTransition(0, 0);
         GridDataActivity.this.finish();
+        
+        Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.putInt("VIEW_OF_TABLE", getResources().getInteger(R.integer.list));
+        editor.commit();
         return true;
     }
 }

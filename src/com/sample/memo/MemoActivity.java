@@ -1,12 +1,15 @@
 package com.sample.memo;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
-import android.app.AlertDialog;
-import android.content.Intent;
 
 
 public class MemoActivity extends Activity {
@@ -37,9 +40,16 @@ public class MemoActivity extends Activity {
         listButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent listDataIntent = new Intent(MemoActivity.this, 
-                                                       com.sample.memo.GridDataActivity.class);
-                    startActivity(listDataIntent);
+                    SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MemoActivity.this);
+                    if (sharedPref.getInt("VIEW_OF_TABLE", 0) == getResources().getInteger(R.integer.grid)) {
+                        Intent gridDataIntent = new Intent(MemoActivity.this, 
+                                                           com.sample.memo.GridDataActivity.class);
+                        startActivity(gridDataIntent);
+                    } else {
+                        Intent listDataIntent = new Intent(MemoActivity.this, 
+                                                           com.sample.memo.ListDataActivity.class);
+                        startActivity(listDataIntent);
+                    }
                 }
             });         
         twitterButton = (Button)findViewById(R.id.twitterButton);
