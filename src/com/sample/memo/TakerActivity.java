@@ -44,7 +44,7 @@ public class TakerActivity extends Activity {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日(E)HH時mm分ss秒");
                 String s = simpleDateFormat.format(calendar.getTime());
                 Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
-                FileOutputStream fileOutputStream = openFileOutput(s + ".bmp", MODE_PRIVATE);
+                FileOutputStream fileOutputStream = openFileOutput(s + ".jpg", MODE_PRIVATE);
                 captureView.setImageBitmap(capturedImage);
                 capturedImage.compress(CompressFormat.JPEG, 100, fileOutputStream);
                 fileOutputStream.close();

@@ -38,7 +38,7 @@ public class MemoActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     Intent listDataIntent = new Intent(MemoActivity.this, 
-                                                       com.sample.memo.ListDataActivity.class);
+                                                       com.sample.memo.GridDataActivity.class);
                     startActivity(listDataIntent);
                 }
             });         

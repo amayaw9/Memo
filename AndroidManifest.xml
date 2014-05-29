@@ -27,8 +27,13 @@
                 android:label="@string/app_name">
       </activity>
 
+      <activity android:name=".GridDataActivity"
+                android:label="@string/app_name">
+      </activity>
+
       <activity android:name=".TakerActivity" 
                 android:label="@string/app_name">
       </activity>
+
     </application>
 </manifest>

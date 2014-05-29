@@ -47,17 +47,20 @@ public class EditorActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
             
-        defaultTitle = getIntent().getStringExtra("TITLE");
-        if (defaultTitle != null && (defaultTitle.length() >= 4 && defaultTitle.substring(defaultTitle.length() - 4, defaultTitle.length()).equals(".bmp"))) {
-            /** 画像ファイルならば写真を表示 */
-            setContentView(R.layout.picture);
-            pictureView = (ImageView)findViewById(R.id.pictureView);
-            try {
-                fileInputStream = openFileInput(defaultTitle);
-                Bitmap pictureImage = BitmapFactory.decodeStream(fileInputStream);
-                pictureView.setImageBitmap(pictureImage);
-            } catch (Exception e) {
-                e.printStackTrace();
+        defaultTitle = getIntent().getStringExtra("TITLE"); 
+        if (defaultTitle != null && defaultTitle.length() >= 4) {
+            int len = defaultTitle.length();
+            if (defaultTitle.substring(len-4, len).equals(".jpg")) {
+                /** 画像ファイルならば写真を表示 */
+                setContentView(R.layout.picture);
+                pictureView = (ImageView)findViewById(R.id.pictureView);
+                try {
+                    fileInputStream = openFileInput(defaultTitle);
+                    Bitmap pictureImage = BitmapFactory.decodeStream(fileInputStream);
+                    pictureView.setImageBitmap(pictureImage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             if (defaultTitle != null) {
