@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
@@ -30,6 +32,7 @@ public class GridDataActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         adapter = new ImageGridViewAdapter(this, Arrays.asList(fileList()));
         
         gridView = new GridView(this);
@@ -86,6 +89,23 @@ public class GridDataActivity extends Activity {
                     }
                     return false;
                 }
-                });
+            });
+    }
+    
+    /** ActionBar関連 */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuItem actionItem = menu.add("一覧をリスト表示に変更");
+        actionItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);        
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent listDataIntent = new Intent(GridDataActivity.this,
+                                           com.sample.memo.ListDataActivity.class);
+        startActivity(listDataIntent);
+        GridDataActivity.this.finish();
+        return true;
     }
 }

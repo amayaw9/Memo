@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -84,5 +86,22 @@ public class ListDataActivity extends Activity {
                     return false;
                 }
             });
+    }
+
+    /** ActionBar関連 */
+    @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+        MenuItem actionItem = menu.add("一覧をグリッド表示に変更");
+        actionItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        return true;
+    }
+
+    @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+        Intent gridDataIntent = new Intent(ListDataActivity.this,
+                                           com.sample.memo.GridDataActivity.class);
+        startActivity(gridDataIntent);
+        ListDataActivity.this.finish();
+        return true;
     }
 }
