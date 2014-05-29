@@ -11,11 +11,13 @@ import java.io.FileInputStream;
 
 
 public class ImageDownloadTask {  
-    private ImageView imageView;  
-    private String fileName;
-    private Bitmap bitmap;  
+    private Context context = null;
+    private ImageView imageView = null;  
+    private String fileName = null;;
+    private Bitmap bitmap = null;  
 
-    public ImageDownloadTask(ImageView imageView, String fileName){  
+    public ImageDownloadTask(Context context, ImageView imageView, String fileName){  
+        this.context = context;
         this.imageView = imageView;
         this.fileName = fileName;
     }  
@@ -26,7 +28,7 @@ public class ImageDownloadTask {
                 @Override
                 public void run() {
                     try {
-                        FileInputStream in = new FileInputStream("data/data/com.sample.memo/" + fileName);
+                        FileInputStream in = context.openFileInput(fileName);
                         bitmap = BitmapFactory.decodeStream(in);  
                         in.close();     
                         if(bitmap == null) 

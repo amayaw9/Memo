@@ -11,7 +11,8 @@ import android.widget.ImageView;
 import java.util.List;  
 
 
-public class ImageGridViewAdapter extends BaseAdapter {  
+public class ImageGridViewAdapter extends BaseAdapter {
+    private Context context = null;
     private List<String> fileList = null;  
     private LayoutInflater inflater = null;  
 
@@ -19,9 +20,10 @@ public class ImageGridViewAdapter extends BaseAdapter {
         ImageView imageView;  
     }  
   
-    public ImageGridViewAdapter(Context context, List<String> fileList) {  
+    public ImageGridViewAdapter(Context context, List<String> fileList) {
+        this.context = context;
         this.fileList = fileList;  
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }  
   
     @Override  
@@ -38,10 +40,12 @@ public class ImageGridViewAdapter extends BaseAdapter {
 
             String s = fileList.get(position);
             int len = (s != null ? s.length() : 0);
-            if (len >= 4 && s.substring(len-4, len).equals("jpg")) {
-                new ImageDownloadTask(holder.imageView, fileList.get(position)).execute();
+            if (len >= 4 && s.substring(len-4, len).equals(".jpg")) {
+                /** 写真ファイルならサムネイル */
+                new ImageDownloadTask(context, holder.imageView, fileList.get(position)).execute();
                 iv.setTag(holder);
             } else {
+                /** テキストファイルならテキストアイコン */
                 holder.imageView.setImageResource(R.drawable.text);
                 iv.setTag(holder);
             }
