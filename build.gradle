@@ -4,11 +4,15 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.0'
+        classpath "com.android.tools.build:gradle:0.9.0"
     }
 }
 
 apply plugin: 'android'
+
+dependencies {
+    compile "com.android.support:support-v4:18.0.+"
+}
 
 android {
     compileSdkVersion 19
@@ -32,10 +36,12 @@ android {
 
         free {
             res.srcDirs = ['app/src/free/res']
+            java.srcDirs = ['app/src/free/java']
         }
 
         pro {
             res.srcDirs = ['app/src/pro/res']
+            java.srcDirs = ['app/src/pro/java']
         }
     }
 

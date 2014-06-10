@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
+    android:weightSum="1">
   <TextView
       android:id="@+id/memoView"
       android:layout_margin="5dp"
@@ -32,12 +32,21 @@
       android:text="一覧"
       />
   <Button
-      android:id="@+id/twitterButton"
+      android:id="@+id/mapButton"
       android:layout_margin="10dp"
       android:layout_width="150dp"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:textSize="15dp"
+      android:text="地図"
+      />
+  <Button
+      android:id="@+id/twitterButton"
+      android:layout_margin="10dp"
+      android:layout_width="150dp"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:textSize="15dp"
       android:text="ツイッター"
-      /> 
+      />
 </LinearLayout>
